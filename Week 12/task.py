@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from tabulate import tabulate
 
 TASK_FILE = "tasks.json"
@@ -23,21 +22,13 @@ def add_task(tasks):
     title = input("Enter task title: ")
     description = input("Enter task description: ")
     priority = input("Enter priority (low/medium/high): ").lower()
-    due_date = input("Enter due date (YYYY-MM-DD) [optional]: ")
-    
-    try:
-        if due_date:
-            due_date = datetime.strptime(due_date, "%Y-%m-%d").strftime("%Y-%m-%d")
-    except ValueError:
-        print("Invalid date format. Task not added.")
-        return
 
+    # Create the task dictionary
     task = {
         "id": len(tasks) + 1,
         "title": title,
         "description": description,
         "priority": priority,
-        "due_date": due_date or None,
         "completed": False
     }
     tasks.append(task)
@@ -100,19 +91,10 @@ def update_task(tasks):
                 new_title = input(f"Enter new title [{task['title']}]: ") or task["title"]
                 new_description = input(f"Enter new description [{task['description']}]: ") or task["description"]
                 new_priority = input(f"Enter new priority [{task['priority']}]: ") or task["priority"]
-                new_due_date = input(f"Enter new due date (YYYY-MM-DD) [{task['due_date']}] [optional]: ") or task["due_date"]
-                
-                if new_due_date:
-                    try:
-                        new_due_date = datetime.strptime(new_due_date, "%Y-%m-%d").strftime("%Y-%m-%d")
-                    except ValueError:
-                        print("Invalid date format. Update aborted.")
-                        return
                 
                 task["title"] = new_title
                 task["description"] = new_description
                 task["priority"] = new_priority
-                task["due_date"] = new_due_date
                 save_tasks(tasks)
                 print("Task updated successfully!")
                 return
